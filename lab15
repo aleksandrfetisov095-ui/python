@@ -1,10 +1,10 @@
+def my_split(stroka):
+    result = []
+    for char in stroka:
+        result.append(char)
+    return result
 def mozhno_sformirovat(stroka1, stroka2):
-    if stroka2 == "":
-        print("РЕЗУЛЬТАТ: Можно составить (пустая строка)")
-    if len(stroka1) < len(stroka2):
-        print(f"РЕЗУЛЬТАТ: Нельзя - первая строка короче ({len(stroka1)} < {len(stroka2)})")
-
-    spisok_simvolov = list(stroka1)
+    spisok_simvolov = my_split(stroka1)
 
     for simvol in stroka2:
         if simvol in spisok_simvolov:
