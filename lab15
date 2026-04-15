@@ -1,21 +1,31 @@
+# пп my_split() - Разбиваение строки на список символов
+# formation() - возможность составления второй строки из первой
+# char,simvol - индексы циклов
+#flag - флаг для отслеживания ошибок
+# pervaya,vtoraya - переменные для ввода данных
 def my_split(stroka):
     result = []
     for char in stroka:
         result.append(char)
     return result
-def mozhno_sformirovat(stroka1, stroka2):
-    spisok_simvolov = my_split(stroka1)
 
-    for simvol in stroka2:
-        if simvol in spisok_simvolov:
-            spisok_simvolov.remove(simvol)
+def formation(stroka1, stroka2):
+    list1 = my_split(stroka1)
+    list2 = my_split(stroka2)
+    flag = True
+
+    for simvol in list2:
+        if simvol in list1:
+            list1.remove(simvol)
         else:
-            print(f"РЕЗУЛЬТАТ: Нельзя - не хватает символа '{simvol}'")
-
-    print("РЕЗУЛЬТАТ: Можно составить!")
-
+            flag = False
+            break
+    if flag:
+        print("РЕЗУЛЬТАТ: Можно составить!")
+    else:
+        print(f"РЕЗУЛЬТАТ: Нельзя составить!")
 
 pervaya = input("Введите первую строку: ")
 vtoraya = input("Введите вторую строку: ")
 
-mozhno_sformirovat(pervaya, vtoraya)
+formation(pervaya, vtoraya)
