@@ -1,0 +1,93 @@
+# Лабораторная работа 14
+# Вариант 26 - Составить подпрограмму подсчета суммы значений элементов в одномерном массиве. 
+# С помощью этой подпрограммы подсчитать суммы элементов столбцов произвольно 
+# заданной двухмерной матрицы и вывести номер столбца с минимальной суммой.
+def input_matrix() -> list[list[int]] | None:
+    """
+        Считывает матрицу с консоли.
+        Возвращает список списков целых чисел или None в случае ошибки ввода.
+        """
+    print("Ввод матрицы:")
+    n: int = int(input("Введите количество строк: "))
+    m: int = int(input("Введите количество столбцов: "))
+
+    matrix: list[list[int]] = []
+    print("Введите элементы матрицы построчно:")
+    for i in range(n):
+        line: str = input(f"Строка {i + 1}: ")
+
+        row: list[int] = []
+        current_number: str = ""
+
+        for char in line:
+            if char != ' ':
+                current_number += char
+            else:
+                if current_number != "":
+                    row.append(int(current_number))
+                    current_number = ""
+
+        if current_number != "":
+            row.append(int(current_number))
+
+        if len(row) != m:
+            print(f"ERROR: в строке должно быть {m} элементов")
+            return None
+        matrix.append(row)
+
+    return matrix
+
+
+def output_matrix(matrix: list[list[int]], name: str = "Матрица") -> None:
+    """
+    Выводит матрицу
+    """
+    print(f"\n{name}:")
+    for row in matrix:
+        for x in row:
+            print(f"{x:6}", end="")
+        print()
+
+def array_sum(arr: list[int]) -> int:
+    """
+    Вычисляет сумму элементов списка
+    """
+    total: int = 0
+    for element in arr:
+        total += element
+    return total
+
+def main() -> None:
+    """
+    Основная функция программы
+    """
+    matrix: list[list[int]] | None = input_matrix()
+    if matrix is None:
+        return
+    output_matrix(matrix, "Исходная матрица")
+    rows: int = len(matrix)
+    cols: int = len(matrix[0])
+
+    column_sums: list[int] = []
+    for j in range(cols):
+        column: list[int] = [matrix[i][j] for i in range(rows)]
+        col_sum: int = array_sum(column)
+        column_sums.append(col_sum)
+    result_matrix: list[list[int]] = [column_sums]
+
+    output_matrix(result_matrix, "Результирующая матрица (суммы столбцов)")
+
+    min_sum: int = column_sums[0]
+    min_column: int = 1
+
+    for j in range(1, cols):
+        if column_sums[j] < min_sum:
+            min_sum = column_sums[j]
+            min_column = j + 1
+
+    print(f"\nСтолбец с минимальной суммой: {min_column}")
+    print(f"Минимальная сумма: {min_sum}")
+
+
+main()
+
