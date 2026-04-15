@@ -1,0 +1,113 @@
+
+# Вариант 26 - Изучение событийной модели на примере библиотеки turtle
+# Создайте одну кнопку, при нажатии на которую генерируется случайное число от 1 до 33 включительно
+# и выводится буква русского алфавита, номер которой соответствует случайному числу.
+# Чем ближе буква к концу алфавита, тем больше ее размер на экране.
+# Буква А выводится высотой 10, буква Я – высотой 43.
+# Гласные буквы выводятся красным цветом, согласные – синим, мягкий и твердый знаки – черным.
+
+from turtle import Screen, Turtle
+import random
+
+def draw_button(x: float, y: float, width: float, height: float, text: str) -> None:
+    """
+    Процедура создания на экране кнопки.
+    Переменные:
+    - x, y - координаты центра кнопки.
+    - width, height - размеры кнопки.
+    - text - текст на кнопке.
+    """
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.pendown()
+
+    #Прямоугольник
+    for _ in range(2):
+        turtle.forward(width)
+        turtle.right(90)
+        turtle.forward(height)
+        turtle.right(90)
+
+    # текст в центре кнопки
+    turtle.penup()
+    turtle.goto(x + width / 2, y - height / 2 - 10)  # Смещение вниз для центровки текста
+    turtle.write(text, align='center', font=('Times New Roman', 14, 'bold'))
+
+
+def on_click(x: float, y: float) -> None:
+    """
+    Обработчик клика мыши.
+    Проверяет попадание в область кнопки, генерирует букву и выводит её.
+    """
+    # Координаты кнопки
+    btn_x = -50
+    btn_y = 50
+    btn_w = 100
+    btn_h = 40
+
+    # Проверка попадания клика в область кнопки(в turtle ось Y идет вверх, поэтому y уменьшается вниз при рисовании)
+    if btn_x <= x <= btn_x + btn_w and btn_y - btn_h <= y <= btn_y:
+        process_letter()
+
+
+def process_letter() -> None:
+    """
+    генерация числа, определение буквы, цвета и размера.
+    """
+    number = random.randint(1, 33)
+
+    alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+    letter = alphabet[number - 1]
+
+    # Определение цвета
+    vowels = "АЕЁИОУЫЭЮЯ"
+    signs = "ЪЬ"
+
+    if letter in vowels:
+        color = "red"
+    elif letter in signs:
+        color = "black"
+    else:
+        color = "blue"
+
+    min_size = 10
+    max_size = 43
+    min_idx = 1
+    max_idx = 33
+
+    font_size = min_size + (number - min_idx) * (max_size - min_size) / (max_idx - min_idx)
+    font_size = int(font_size)  # до целого
+
+    # Вывод результата
+
+    turtle.undo()
+
+    turtle.penup()
+    turtle.goto(0, -50)  #вывод буквы под кнопкой
+    turtle.color(color)
+
+    turtle.write(letter, align='center', font=('Times New Roman', font_size, 'normal'))
+
+
+screen = Screen()
+turtle = Turtle()
+
+#экран
+screen.title('Лабораторная работа №18 (Задание 26) - Алфавит')
+screen.setup(500, 400)
+screen.bgcolor('white')
+
+#настройка черепахи
+turtle.hideturtle()
+turtle.speed(0)
+turtle.penup()
+
+draw_button(-50, 50, 100, 40, "ЖМИ!")
+
+
+turtle.setundobuffer(10)  # Буфер на 10 действий, чтобы хранить историю букв
+
+screen.onclick(on_click)
+screen.listen()
+
+screen.mainloop()
