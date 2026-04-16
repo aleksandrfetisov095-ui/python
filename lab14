@@ -32,10 +32,10 @@ output_matrix(n, m, a)
 
 column_sums = []
 for j in range(m):
-    col = [a[i][j] for i in range(n)]   
-    s = array_sum(col)
+    s = 0
+    for i in range(n):
+        s += a[i][j]
     column_sums.append(s)
 
 print("\nСуммы столбцов:", column_sums)
-
 
