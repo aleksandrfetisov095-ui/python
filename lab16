@@ -1,0 +1,37 @@
+import struct
+import math
+
+# f - файловая переменная
+# filename - название файла
+# n - кол чисел (определяет пользователь)
+# i - параметр цикла
+# ai - основная формула
+# positive_count - счетчик положительных значений
+# data - байты прочитанные из файла
+# value - расшифровка файла
+
+
+n = int(input("Сколько компонентов записать? "))
+filename = 'data.bin'
+
+with open(filename, 'wb') as f:
+    for i in range(n):
+        ai = (i + 1) ** 2 * math.sin(i * math.pi / 10)
+        f.write(struct.pack('f', ai))
+
+print("Файл создан.")
+
+positive_count = 0
+
+with open(filename, 'rb') as f:
+    for _ in range(n):
+        data = f.read(4)
+        if len(data) < 4:
+            print("Ошибка: файл поврежден или меньше ожидаемого размера")
+
+        value = struct.unpack('f', data)[0]
+        print(f"Прочитано: {value:.2f}")
+        if value > 0:
+            positive_count += 1
+
+print(f"Положительных значений: {positive_count}")
