@@ -7,7 +7,7 @@ import math
 # i - параметр цикла
 # ai - основная формула
 # positive_count - счетчик положительных значений
-# data - байты прочитанные из файла
+# s - байты прочитанные из файла
 # value - расшифровка файла
 
 n = int(input("Сколько компонентов записать? "))
@@ -24,9 +24,9 @@ print("Файл создан.")
 positive_count = 0
 f = open(filename, 'rb')
 
-for _ in range(n):
-    data = f.read(4)
-    value = struct.unpack('f', data)[0]
+for i in range(n):
+    s = f.read(4)
+    value = struct.unpack('f', s)[0]
 
     if value >= 0:
         positive_count += 1
