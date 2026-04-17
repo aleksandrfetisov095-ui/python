@@ -10,28 +10,27 @@ import math
 # data - байты прочитанные из файла
 # value - расшифровка файла
 
-
 n = int(input("Сколько компонентов записать? "))
 filename = 'data.bin'
 
-with open(filename, 'wb') as f:
-    for i in range(n):
-        ai = (i + 1) ** 2 * math.sin(i * math.pi / 10)
-        f.write(struct.pack('f', ai))
+f = open(filename, 'wb')
+for i in range(n):
+    ai = (i + 1) ** 2 * math.sin((i * math.pi) / 10)
+    f.write(struct.pack('f', ai))
+f.close()
 
 print("Файл создан.")
 
 positive_count = 0
+f = open(filename, 'rb')
 
-with open(filename, 'rb') as f:
-    for _ in range(n):
-        data = f.read(4)
-        if len(data) < 4:
-            print("Ошибка: файл поврежден или меньше ожидаемого размера")
+for _ in range(n):
+    data = f.read(4)
+    value = struct.unpack('f', data)[0]
 
-        value = struct.unpack('f', data)[0]
-        print(f"Прочитано: {value:.2f}")
-        if value > 0:
-            positive_count += 1
+    if value >= 0:
+        positive_count += 1
 
-print(f"Положительных значений: {positive_count}")
+    print(f"Значение: {value:.2f}")
+f.close()
+print(f"\nПоложительных значений: {positive_count}")
