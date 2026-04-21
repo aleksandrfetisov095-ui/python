@@ -51,6 +51,6 @@ while True:
             no_palindromes = remove_palindromes(s1)
             print(f'Строка без палиндромов: "{no_palindromes}"')
 
-        case '0' | _:
+        case '0':
             print('Программа завершена.')
             break
