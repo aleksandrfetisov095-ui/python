@@ -1,30 +1,36 @@
 from .utils import get_words_manual, clean_word
 
-
-def find_longest_words(text: str) -> list[str]:
+def find_longest_words(text: str) -> list:
     """
-    1) Определяет самое длинное слово в строке.
-    Если слов с максимальной длиной несколько – выводит все.
+    Находит все слова максимальной длины.
     """
     words = get_words_manual(text)
-    if not words:
+    if len(words) == 0:
         return []
-
-    # Находим максимальную длину среди слов
+    
+    #Максимальная длина
     max_len = 0
     for w in words:
         cleaned = clean_word(w)
         if len(cleaned) > max_len:
             max_len = len(cleaned)
-
-    # Собираем все слова такой длины (оригинальные, с пунктуацией)
+            
+    #Собираем слова этой длины
     result = []
-    seen = set()
-
+    seen_cleaned = [] # Список уже очищенных слов, чтобы не дублировать
+    
     for w in words:
         cleaned = clean_word(w)
-        if len(cleaned) == max_len and cleaned not in seen:
-            result.append(w)
-            seen.add(cleaned)
-
+        
+        # Проверка: длина совпадает И слово еще не добавлено
+        is_duplicate = False
+        for seen in seen_cleaned:
+            if seen == cleaned:
+                is_duplicate = True
+                break
+                
+        if len(cleaned) == max_len and not is_duplicate:
+            result.append(w)       # Добавляем оригинальное слово
+            seen_cleaned.append(cleaned) # Запоминаем очищенное
+            
     return result
