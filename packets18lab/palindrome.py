@@ -1,4 +1,4 @@
-from .utils import get_words_manual, clean_word
+from .utils import my_split, clean_word
 
 
 def is_palindrome(word: str) -> bool:
@@ -6,9 +6,17 @@ def is_palindrome(word: str) -> bool:
     Проверяет, является ли слово палиндромом
     """
     cleaned = clean_word(word).lower()
-    if not cleaned:
-        return False
-    return cleaned == cleaned[::-1]
+
+    left = 0
+    right = len(cleaned) - 1
+
+    while left < right:
+        if cleaned[left] != cleaned[right]:
+            return False
+        left += 1
+        right -= 1
+
+    return True
 
 
 def remove_palindromes(text: str) -> str:
@@ -16,7 +24,7 @@ def remove_palindromes(text: str) -> str:
     4) Удаляет из строки слова-палиндромы.
     Возвращает новую строку без этих слов.
     """
-    words = get_words_manual(text)
+    words = my_split(text)
     new_words = []
 
     for w in words:
