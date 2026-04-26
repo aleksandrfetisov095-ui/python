@@ -7,9 +7,6 @@ def find_longest_words(text: str) -> list[str]:
     Если слов с максимальной длиной несколько – выводит все.
     """
     words = my_split(text)
-    if not words:
-        return []
-
     # Находим максимальную длину среди слов
     max_len = 0
     for w in words:
