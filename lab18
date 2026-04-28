@@ -23,28 +23,19 @@ while True:
         case '1':
             s1 = input('Введите строку: ')
             longest = find_longest_words(s1)
-            if longest:
-                print(f'Самые длинные слова: {", ".join(longest)}')
-            else:
-                print('Слов не найдено.')
+            print(f'Самые длинные слова: {", ".join(longest)}')
 
         case '2':
             s1 = input('Введите первую строку: ')
             s2 = input('Введите вторую строку: ')
             freq_word = find_most_frequent_in_two(s1, s2)
-            if freq_word:
-                print(f'Слово, встречающееся чаще всего: "{freq_word}"')
-            else:
-                print('Нет общих слов или строки пусты.')
+            print(f'Слово, встречающееся чаще всего: "{freq_word}"')
 
         case '3':
             s1 = input('Введите первую строку: ')
             s2 = input('Введите вторую строку: ')
             common = find_common_words(s1, s2)
-            if common:
-                print(f'Общие слова: {", ".join(common)}')
-            else:
-                print('Общих слов нет.')
+            print(f'Общие слова: {", ".join(common)}')
 
         case '4':
             s1 = input('Введите строку: ')
