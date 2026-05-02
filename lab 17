@@ -1,0 +1,185 @@
+from random import randint, choice
+
+NAME_DATA = "Data.txt"
+NAME_RES = "Result.txt"
+
+SIMVOLS = "ABCDEF0123456789"
+
+
+def create_file():
+    """Режим 1: Создание файла Data.txt"""
+    print("Введите количество строк N:")
+    n_str = input()
+    n = int(n_str)
+    f = open(NAME_DATA, "w")
+
+    i = 0
+    while i < n:
+        length = randint(10, 100)
+        line = ""
+        j = 0
+        while j < length:
+            symbol = choice(SIMVOLS)
+            line = line + symbol
+            j = j + 1
+        f.write(line + "\n")
+        i = i + 1
+
+    f.close()
+    print("Файл " + NAME_DATA + " успешно создан.")
+
+
+def find_max_chain(line):
+    """Вспомогательная функция: ищет макс. длину цепочки букв без 'A' в одной строке"""
+    max_len = 0
+    cur_len = 0
+
+    i = 0
+    while i < len(line):
+        char = line[i]
+
+        # Проверка буква ли это и не 'A' ли
+        is_letter = char.isalpha()
+        is_not_A = (char != 'A')
+
+        if is_letter and is_not_A:
+            cur_len = cur_len + 1
+            if cur_len > max_len:
+                max_len = cur_len
+        else:
+            cur_len = 0
+
+        i = i + 1
+
+    return max_len
+
+
+def get_numbers_from_line(line):
+    """Вспомогательная функция: вытаскивает все числа из строки в список"""
+    numbers = []
+    current_num = ""
+
+    i = 0
+    while i < len(line):
+        char = line[i]
+        if char.isdigit():
+            current_num = current_num + char
+        else:
+            if len(current_num) > 0:
+                numbers.append(current_num)
+                current_num = ""
+        i = i + 1
+
+    if len(current_num) > 0:
+        numbers.append(current_num)
+
+    return numbers
+
+
+def is_increasing(num_str):
+    """Проверяет, возрастают ли цифры в числе"""
+    if len(num_str) <= 1:
+        return True
+
+    i = 0
+    while i < len(num_str) - 1:
+        digit1 = int(num_str[i])
+        digit2 = int(num_str[i + 1])
+
+        if digit1 >= digit2:
+            return False
+        i = i + 1
+
+    return True
+
+
+def process_file():
+    """Режим 2: Обработка файла"""
+    try:
+        f = open(NAME_DATA, "r")
+        lines = f.readlines()
+        f.close()
+    except FileNotFoundError:
+        print("Ошибка: Файл " + NAME_DATA + " не найден. Сначала создайте его.")
+        return
+
+    if len(lines) == 0:
+        print("Файл пуст.")
+        return
+
+    best_line_index = -1 
+    best_chain_len = -1
+
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+
+        if len(line) > 0:
+            current_chain = find_max_chain(line)
+
+            if current_chain >= best_chain_len:
+                best_chain_len = current_chain
+                best_line_index = i
+
+        i = i + 1
+
+    result_text = ""
+
+    if best_line_index == -1:
+        result_text = "Подходящих строк с буквами (не A) не найдено."
+    else:
+        target_line = lines[best_line_index].strip()
+
+        all_nums = get_numbers_from_line(target_line)
+
+        max_good_number = -1  #
+        found_any = False
+
+        k = 0
+        while k < len(all_nums):
+            num_str = all_nums[k]
+
+            if is_increasing(num_str):
+                val = int(num_str)
+                if not found_any:
+                    max_good_number = val
+                    found_any = True
+                else:
+                    if val > max_good_number:
+                        max_good_number = val
+
+            k = k + 1
+
+        line_num = best_line_index + 1
+
+        if found_any:
+            result_text = "Номер строки: " + str(line_num) + "\n"
+            result_text = result_text + "Наибольшее число: " + str(max_good_number)
+        else:
+            result_text = "Номер строки: " + str(line_num) + "\n"
+            result_text = result_text + "В этой строке нет чисел с возрастающими цифрами."
+    f_out = open(NAME_RES, "w")
+    f_out.write(result_text)
+    f_out.close()
+
+    print("Результат записан в " + NAME_RES)
+    print("---")
+    print(result_text)
+
+mode = ""
+while mode != "0":
+    print("\nВыберите действие:")
+    print("1 - Создать файл Data.txt")
+    print("2 - Обработать файл (Вариант 26)")
+    print("0 - Выход")
+
+    mode = input()
+
+    if mode == "1":
+        create_file()
+    elif mode == "2":
+        process_file()
+    elif mode == "0":
+        print("Программа завершена.")
+    else:
+        print("Неверный ввод. Попробуйте снова.")
