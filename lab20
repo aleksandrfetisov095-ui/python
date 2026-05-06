@@ -1,0 +1,162 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+import os
+import tempfile
+from PIL import Image, ImageTk
+
+PRICE = 5.0
+DISC_WEEKEND = 0.15
+DISC_LONG = 0.30
+LIMIT_MIN = 30
+HISTORY_FILE = os.path.join(tempfile.gettempdir(), 'history.txt')
+
+
+def calc():
+    try:
+        mins_str = entry_mins.get().strip()
+        if not mins_str:
+            messagebox.showerror("Ошибка", "Введите количество минут!")
+            return
+
+        mins = float(mins_str)
+        if mins < 0:
+            messagebox.showerror("Ошибка", "Время не может быть отрицательным!")
+            return
+
+        day = var_day.get()
+        weekend = (day == "Суббота" or day == "Воскресенье")
+
+        if mins > LIMIT_MIN:
+            cost_first = LIMIT_MIN * PRICE
+            cost_extra = (mins - LIMIT_MIN) * PRICE * (1 - DISC_LONG)
+            cost = cost_first + cost_extra
+        else:
+            cost = mins * PRICE
+
+        if weekend:
+            cost = cost * (1 - DISC_WEEKEND)
+
+        lbl_res.config(text=f"Итого: {cost:.2f} руб.", fg="green")
+
+        with open(HISTORY_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"{day}, {mins} мин, {cost:.2f} руб.\n")
+
+    except ValueError:
+        messagebox.showerror("Ошибка", "Введите корректное число минут!")
+
+
+def load_hist():
+    txt_hist.delete(1.0, tk.END)
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+            txt_hist.insert(tk.END, f.read())
+    else:
+        messagebox.showinfo("Инфо", "Нет истории вычислений")
+
+def exit_prog():
+    if messagebox.askyesno("Выход", "Выйти или нет?"):
+        root.destroy()
+
+def about_prog():
+    messagebox.showinfo("О программе",
+                        "Расчет стоимости междугороднего звонка.\n"
+                        "Задание 5 (Сложные задания).\n"
+                        "Учитывает скидки за выходные и длительность.")
+def about_author():
+    win = tk.Toplevel()
+    win.title("Автор")
+    win.geometry("250x300")
+
+    tk.Label(win, text="Студент группы 546").pack(pady=10)
+
+    img_path = "author.jpg"
+    if os.path.exists(img_path):
+        try:
+            img = Image.open(img_path).resize((150, 150))
+            photo = ImageTk.PhotoImage(img)
+            lbl_img = tk.Label(win, image=photo)
+            lbl_img.image = photo
+            lbl_img.pack()
+        except Exception as e:
+            tk.Label(win, text=f"Ошибка картинки: {e}").pack()
+    else:
+        tk.Label(win, text="(Нет фото author.jpg)").pack()
+
+    tk.Button(win, text="Закрыть", command=win.destroy).pack(pady=10)
+
+def clear_history_context():
+    """Очищает текстовое поле истории"""
+    if messagebox.askyesno("Подтверждение", "Очистить поле истории?"):
+        txt_hist.delete(1.0, tk.END)
+
+def show_context_menu(event):
+    """Показывает контекстное меню в точке клика мыши"""
+    context_menu.post(event.x_root, event.y_root)
+
+
+root = tk.Tk()
+root.title("Стоимость звонка")
+root.geometry("400x350")
+root.protocol("WM_DELETE_WINDOW", exit_prog)
+
+# Главное меню
+menu = tk.Menu(root)
+root.config(menu=menu)
+
+file_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label="Файл", menu=file_menu)
+file_menu.add_command(label="Открыть историю", command=load_hist)
+file_menu.add_separator()
+file_menu.add_command(label="Выход", command=exit_prog)
+
+help_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label="Справка", menu=help_menu)
+help_menu.add_command(label="О программе", command=about_prog)
+help_menu.add_command(label="Об авторе", command=about_author)
+
+# Вкладки
+nb = ttk.Notebook(root)
+nb.pack(fill='both', expand=True, padx=5, pady=5)
+
+# вкладка1 - Расчет
+tab1 = ttk.Frame(nb)
+nb.add(tab1, text="Расчет")
+
+tk.Label(tab1, text="Минут:").grid(row=0, column=0, padx=5, pady=5, sticky='w')
+entry_mins = tk.Entry(tab1, width=10)
+entry_mins.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+entry_mins.insert(0, "1")
+
+tk.Label(tab1, text="День:").grid(row=1, column=0, padx=5, pady=5, sticky='w')
+
+var_day = tk.StringVar(value="Будний")
+tk.Radiobutton(tab1, text="Будний", variable=var_day, value="Будний").grid(row=1, column=1, sticky='w')
+tk.Radiobutton(tab1, text="Суббота", variable=var_day, value="Суббота").grid(row=1, column=1, sticky='w', padx=(60, 0))
+tk.Radiobutton(tab1, text="Вс", variable=var_day, value="Воскресенье").grid(row=1, column=1, sticky='w', padx=(130, 0))
+
+btn_calc = tk.Button(tab1, text="Рассчитать", command=calc)
+btn_calc.grid(row=2, column=0, columnspan=2, pady=10)
+
+lbl_res = tk.Label(tab1, text="Стоимость: 0.00 руб.", font=("Arial", 10, "bold"))
+lbl_res.grid(row=3, column=0, columnspan=2)
+
+#вкладка2 - История
+tab2 = ttk.Frame(nb)
+nb.add(tab2, text="История")
+
+txt_hist = tk.Text(tab2, wrap=tk.WORD)
+scr = ttk.Scrollbar(tab2, command=txt_hist.yview)
+txt_hist.configure(yscrollcommand=scr.set)
+
+scr.pack(side=tk.RIGHT, fill=tk.Y)
+txt_hist.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+# Создание контекстного меню
+context_menu = tk.Menu(txt_hist, tearoff=0)
+context_menu.add_command(label="Очистить историю", command=clear_history_context)
+context_menu.add_command(label="Показать историю", command=load_hist)
+
+# Привязывание правого клика мыши к показу меню
+txt_hist.bind('<Button-3>', show_context_menu)
+
+root.mainloop()
