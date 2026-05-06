@@ -1,0 +1,72 @@
+import sys
+import os
+
+from bd import db_manager
+from bd import logic
+
+
+def main():
+    # Инициализация БД
+    created = db_manager.init_excel_file()
+    if created:
+        print("База данных создана и заполнена начальными данными.")
+
+    cars_db = db_manager.load_data_from_excel()
+
+    if not cars_db:
+        print("Не удалось загрузить данные или база пуста. Проверьте файл cars.xlsx")
+        # Можно предложить создать заново, удалив файл, но пока просто выходим
+        return
+
+    while True:
+        print("\n" + "*" * 40)
+        print(" МЕНЮ ".center(40, "*"))
+        print("1. Просмотр всех записей")
+        print("2. Добавление записей")
+        print("3. Удаление записи")
+        print("4. Расширенный поиск")
+        print("5. Расчет удельной стоимости")
+        print("6. Сравнение двух производителей")
+        print("7. Сохранить и Выход")
+        print("8. Выход без сохранения")
+
+        choice = input("Выберите пункт: ").strip()
+
+        if choice == "1":
+            logic.show_table(cars_db)
+
+        elif choice == "2":
+            logic.add_records_interactive(cars_db)
+            # Данные изменены в памяти, сохранение при выходе или пункте 7
+
+        elif choice == "3":
+            # Вызываем функцию удаления, которая теперь запрашивает подтверждение
+            logic.delete_record_interactive(cars_db)
+
+        elif choice == "4":
+            # Вызываем новое меню поиска
+            logic.search_menu(cars_db)
+
+        elif choice == "5":
+            logic.calc_ud_costs(cars_db)
+
+        elif choice == "6":
+            logic.sort_by_ud_for_manufacturers(cars_db)
+
+        elif choice == "7":
+            db_manager.save_data_to_excel(cars_db)
+            print("Данные успешно сохранены в Excel. Работа завершена.")
+            break
+
+        elif choice == "8":
+            confirm = input("Вы уверены, что хотите выйти без сохранения изменений? (д/н): ")
+            if confirm.lower() == 'д':
+                print("Работа завершена без сохранения.")
+                break
+
+        else:
+            print("Неверный ввод. Попробуйте снова.")
+
+
+if __name__ == "__main__":
+    main()
