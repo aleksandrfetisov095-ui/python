@@ -1,0 +1,144 @@
+import sympy as sp
+
+x, y, z, a, b, n = sp.symbols('x y z a b n')
+
+print("\nЧАСТЬ 1")
+
+print("\nЗАДАЧА 1")
+expr1 = (2*x - 1)*(x + 2)*(x - 3)
+expanded_expr1 = sp.expand(expr1)
+print(f"Исходное: {expr1}")
+print(f"Раскрытое: {expanded_expr1}")
+
+print("\nЗАДАЧА 2")
+poly2 = x**5 - 11*x**4 + 26*x**3 - 53*x**2 + 72*x - 36
+factored_poly2 = sp.factor(poly2)
+print(f"Исходный: {poly2}")
+print(f"Разложенный: {factored_poly2}")
+
+print("\nЗАДАЧА 3")
+expr3 = a*sp.sin(3*x) + b*sp.cos(y)
+val3 = expr3.subs({a: 2, b: 3, x: sp.pi/4, y: sp.pi/12})
+num_val3 = val3.evalf(3)
+print(f"Символьное значение: {val3}")
+print(f"Численное значение (3 знака): {num_val3}")
+
+print("\nЗАДАЧА 4")
+expr4 = 1/x + 2/(x-3) - 3/(x+2) - x/(x-3)
+combined_expr4 = sp.together(expr4)
+simplified_expr4 = sp.simplify(combined_expr4)
+print(f"Исходное: {expr4}")
+print(f"Общий знаменатель: {combined_expr4}")
+print(f"Упрощенное: {simplified_expr4}")
+
+print("\nЗАДАЧА 5")
+expr5 = (3*x + 2) / (x * (x**2 - x - 6))
+apart_expr5 = sp.apart(expr5, x)
+print(f"Исходная дробь: {expr5}")
+print(f"Элементарные дроби: {apart_expr5}")
+
+print("\nЗАДАЧА 6")
+eq6a = 2*sp.sin(3*x) - 2*sp.cos(2*x)
+sol6a = sp.solveset(eq6a, x, domain=sp.Interval(-sp.pi/2, sp.pi/2))
+print(f"6a) Корни уравнения 2sin(3x)-2cos(2x)=0 на [-pi/2, pi/2]: {sol6a}")
+
+poly6b = x**6 - 6*x**5 + 12*x**4 - 12*x**3 + 11*x**2 - 6*x
+roots6b = sp.roots(poly6b, x)
+print(f"6b) Корни многочлена (корень: кратность): {roots6b}")
+
+print("\nЗАДАЧА 7")
+eq1 = 2*x - y + z
+eq2 = x + 2*y - z - 5
+eq3 = x - y + 2*z - 2
+sol7a = sp.linsolve([eq1, eq2, eq3], (x, y, z))
+print(f"7a) Решение линейной системы: {sol7a}")
+
+eq_circle = (x-2)**2 + (y-3)**2 - 16
+eq_line = y - x - 5
+sol7b = sp.solve([eq_circle, eq_line], (x, y))
+print(f"7б) Решение нелинейной системы: {sol7b}")
+
+
+# ЧАСТЬ 2
+
+
+print("\nЧАСТЬ 2")
+
+print("\nЗАДАЧА 1")
+lim1a = sp.limit(1/x + 1/sp.sin(x+1), x, -1)
+print(f"1a) Предел: {lim1a}")
+
+lim1b = sp.limit((sp.sin(2*sp.ln(x)) - 1) / (x - sp.E), x, sp.E)
+print(f"1b) Предел: {lim1b}")
+
+print("\nЗАДАЧА 2")
+d2a = sp.diff(sp.exp(x)/(x+1), x)
+print(f"2a) Производная: {sp.simplify(d2a)}")
+
+d2b = sp.diff(sp.exp(3*x+2), x)
+print(f"2b) Производная: {sp.simplify(d2b)}")
+
+d2c = sp.diff(sp.sin(5*x-3), x, 3)
+print(f"2c) 3-я производная: {sp.simplify(d2c)}")
+
+print("\nЗАДАЧА 3")
+f3 = x**2 - 2*(x - 6)
+derivative_f3 = sp.diff(f3, x)
+print(f"Производная функции: {derivative_f3}")
+
+crit_pts = sp.solve(derivative_f3, x)
+print(f"Найденные критические точки: {crit_pts}")
+
+valid_pts = []
+for pt in crit_pts:
+    if pt >= -2 and pt <= 4:
+        valid_pts.append(pt)
+
+print(f"Точки, попавшие в отрезок [-2; 4]: {valid_pts}")
+
+values = []
+
+for pt in valid_pts:
+    val = f3.subs(x, pt)
+    values.append(val)
+
+val_left = f3.subs(x, -2)
+val_right = f3.subs(x, 4)
+
+values.append(val_left)
+values.append(val_right)
+
+print(f"Список всех значений для сравнения: {values}")
+
+min_val = min(values)
+max_val = max(values)
+
+print(f"Наименьшее значение (Мин): {min_val}")
+print(f"Наибольшее значение (Макс): {max_val}")
+
+print("\nЗАДАЧА 4")
+f4 = sp.ln(x**2 + y**2) + 2*x/y
+df4_dx = sp.diff(f4, x).subs({x:2, y:1})
+df4_dy = sp.diff(f4, y).subs({x:2, y:1})
+print(f"4) df/dx(2,1) = {df4_dx}, df/dy(2,1) = {df4_dy}")
+
+print("\nЗАДАЧА 5")
+int5a = sp.integrate(1/sp.sqrt(16-x**2), (x, 0, 2))
+print(f"5a) Интеграл: {int5a}")
+
+int5b = sp.integrate(sp.atan(x)/x**2, (x, 1, sp.oo))
+print(f"5b) Интеграл: {int5b}")
+
+int5c = sp.integrate(sp.integrate(sp.cos(2*y)*x*y, (x, 1, 2)), (y, sp.pi/2, sp.pi))
+print(f"5c) Двойной интеграл: {int5c}")
+
+print("\nЗАДАЧА 6")
+n = sp.symbols('n')
+term6 = 36 / (n**2 + 2*n - 3)
+sum6 = sp.summation(term6, (n, 2, sp.oo))
+print(f"6) Сумма ряда: {sum6}")
+
+print("\nЗАДАЧА 7")
+f7 = x / (2+x)
+series7 = f7.series(x, -2, 5)
+print(f"7) Ряд в точке -2: {series7}")
