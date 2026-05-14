@@ -1,144 +1,276 @@
+"""
+Работа №21 - Вариант 26 (Вариант 6)
+Python в научных исследованиях
+"""
+
+import matplotlib
+matplotlib.use('TkAgg')
 import sympy as sp
+from sympy.plotting import plot, plot_parametric, plot3d
 
-x, y, z, a, b, n = sp.symbols('x y z a b n')
+sp.init_printing(use_latex=True)
 
-print("\nЧАСТЬ 1")
+x, y, t, phi, n = sp.symbols('x y t phi n')
 
-print("\nЗАДАЧА 1")
-expr1 = (2*x - 1)*(x + 2)*(x - 3)
-expanded_expr1 = sp.expand(expr1)
-print(f"Исходное: {expr1}")
-print(f"Раскрытое: {expanded_expr1}")
+print("1. ОСНОВЫ СИМВОЛЬНЫХ ВЫЧИСЛЕНИЙ (Вариант 6)")
 
-print("\nЗАДАЧА 2")
-poly2 = x**5 - 11*x**4 + 26*x**3 - 53*x**2 + 72*x - 36
-factored_poly2 = sp.factor(poly2)
-print(f"Исходный: {poly2}")
-print(f"Разложенный: {factored_poly2}")
+# 1.1 раскрыть скобки: (2x-1)(x+2)(x-3)
+expr1 = (2*x - 1) * (x + 2) * (x - 3)
+print("1) Раскрыть скобки:", expr1)
+print("\tРезультат:", sp.expand(expr1))
 
-print("\nЗАДАЧА 3")
-expr3 = a*sp.sin(3*x) + b*sp.cos(y)
-val3 = expr3.subs({a: 2, b: 3, x: sp.pi/4, y: sp.pi/12})
-num_val3 = val3.evalf(3)
-print(f"Символьное значение: {val3}")
-print(f"Численное значение (3 знака): {num_val3}")
+# 1.2 разложить на множители: x^5 - 11x^4 + 26x^3 - 53x^2 + 72x - 36
+expr2 = x**5 - 11*x**4 + 26*x**3 - 53*x**2 + 72*x - 36
+print("\n2) Разложить на множители:", expr2)
+f = sp.factor(expr2)
+if f == expr2:
+    print("\tНе раскладывается над рациональными числами.")
+else:
+    print("\tРезультат:", f)
 
-print("\nЗАДАЧА 4")
+# 1.3 вычислить значение: a*sin(3x) + b*cos(y) при a=2, b=3, x=π/4, y=π/12, n=3
+a_val, b_val = 2, 3
+x_val, y_val = sp.pi/4, sp.pi/12
+expr3 = a_val * sp.sin(3*x_val) + b_val * sp.cos(y_val)
+print("\n3) Вычислить a*sin(3x) + b*cos(y)")
+print("\tРезультат:", expr3.evalf(3))
+
+# 1.4 привести к общему знаменателю: 1/x + 2/(x-3) - 3/(x+2) - x/(x-3)
 expr4 = 1/x + 2/(x-3) - 3/(x+2) - x/(x-3)
-combined_expr4 = sp.together(expr4)
-simplified_expr4 = sp.simplify(combined_expr4)
-print(f"Исходное: {expr4}")
-print(f"Общий знаменатель: {combined_expr4}")
-print(f"Упрощенное: {simplified_expr4}")
+print("\n4) Привести к общему знаменателю:", expr4)
+print("\tРезультат:", sp.simplify(sp.together(expr4)))
 
-print("\nЗАДАЧА 5")
+# 1.5 разложить на простейшие дроби: (3x+2)/(x*(x^2-x-6))
 expr5 = (3*x + 2) / (x * (x**2 - x - 6))
-apart_expr5 = sp.apart(expr5, x)
-print(f"Исходная дробь: {expr5}")
-print(f"Элементарные дроби: {apart_expr5}")
+print("\n5) Разложить на простейшие дроби:", expr5)
+print("\tРезультат:", sp.apart(expr5))
 
-print("\nЗАДАЧА 6")
+# 1.6.а решить уравнение на интервале: 2sin(3x) - 2cos(2x) = 0, x∈[-π/2, π/2]
 eq6a = 2*sp.sin(3*x) - 2*sp.cos(2*x)
-sol6a = sp.solveset(eq6a, x, domain=sp.Interval(-sp.pi/2, sp.pi/2))
-print(f"6a) Корни уравнения 2sin(3x)-2cos(2x)=0 на [-pi/2, pi/2]: {sol6a}")
+sols6a = sp.solveset(eq6a, x, domain=sp.Interval(-sp.pi/2, sp.pi/2))
+print("\n6а) Решить 2sin(3x) - 2cos(2x) = 0 на [-π/2, π/2]")
+print("\tКорни:", sols6a)
+if sols6a:
+    r = list(sols6a)[0]
+    print("\tПроверка:", eq6a.subs(x, r).simplify(), "= 0")
 
-poly6b = x**6 - 6*x**5 + 12*x**4 - 12*x**3 + 11*x**2 - 6*x
-roots6b = sp.roots(poly6b, x)
-print(f"6b) Корни многочлена (корень: кратность): {roots6b}")
+# 1.6.б корни многочлена: x^6 - 6x^5 + 12x^4 - 12x^3 + 11x^2 - 6x
+expr6b = x**6 - 6*x**5 + 12*x**4 - 12*x**3 + 11*x**2 - 6*x
+print("\n6б) Корни многочлена:", expr6b)
+print("\tКорни:", sp.roots(expr6b))
 
-print("\nЗАДАЧА 7")
-eq1 = 2*x - y + z
-eq2 = x + 2*y - z - 5
-eq3 = x - y + 2*z - 2
-sol7a = sp.linsolve([eq1, eq2, eq3], (x, y, z))
-print(f"7a) Решение линейной системы: {sol7a}")
+# 1.7.а система линейных уравнений
+x1, y1, z1 = sp.symbols('x1 y1 z1')
+eq1 = 2*x1 - y1 + z1
+eq2 = x1 + 2*y1 - z1 - 5
+eq3 = x1 - y1 + 2*z1 - 2
+sol7a = sp.solve([eq1, eq2, eq3], [x1, y1, z1])
+print("\n7а) Решить систему линейных уравнений:")
+print("\t2x - y + z = 0")
+print("\tx + 2y - z = 5")
+print("\tx - y + 2z = 2")
+print("\tРешение:", sol7a)
 
-eq_circle = (x-2)**2 + (y-3)**2 - 16
-eq_line = y - x - 5
-sol7b = sp.solve([eq_circle, eq_line], (x, y))
-print(f"7б) Решение нелинейной системы: {sol7b}")
+# 1.7.б нелинейная система: (x-2)^2+(y-3)^2=16; y=x+5
+x2, y2 = sp.symbols('x2 y2')
+eq4 = (x2 - 2)**2 + (y2 - 3)**2 - 16
+eq5 = y2 - x2 - 5
+sol7b = sp.solve([eq4, eq5], [x2, y2])
+print("\n7б) Решить нелинейную систему:")
+print("\t(x-2)^2 + (y-3)^2 = 16")
+print("\ty = x + 5")
+print("\tРешение:", sol7b)
 
 
-# ЧАСТЬ 2
+print("\n2. МАТЕМАТИЧЕСКИЙ АНАЛИЗ (Вариант 6)")
 
-
-print("\nЧАСТЬ 2")
-
-print("\nЗАДАЧА 1")
 lim1a = sp.limit(1/x + 1/sp.sin(x+1), x, -1)
-print(f"1a) Предел: {lim1a}")
-
+print("1а) lim (x->-1) (1/x + 1/sin(x+1)) =", lim1a)
 lim1b = sp.limit((sp.sin(2*sp.ln(x)) - 1) / (x - sp.E), x, sp.E)
-print(f"1b) Предел: {lim1b}")
+print("1б) lim (x->e) (sin(2lnx)-1)/(x-e) =", lim1b)
 
-print("\nЗАДАЧА 2")
+# Производные
 d2a = sp.diff(sp.exp(x)/(x+1), x)
-print(f"2a) Производная: {sp.simplify(d2a)}")
-
+print("\n2а) f'(x) для e^x/(x+1) =", d2a)
 d2b = sp.diff(sp.exp(3*x+2), x)
-print(f"2b) Производная: {sp.simplify(d2b)}")
-
+print("2б) f'(x) для e^(3x+2) =", d2b)
 d2c = sp.diff(sp.sin(5*x-3), x, 3)
-print(f"2c) 3-я производная: {sp.simplify(d2c)}")
+print("2в) f'''(x) для sin(5x-3) =", d2c)
 
-print("\nЗАДАЧА 3")
+# Наибольшее и наименьшее значение на отрезке: f(x)=x^2-2(x-6) на [-2,4]
 f3 = x**2 - 2*(x - 6)
-derivative_f3 = sp.diff(f3, x)
-print(f"Производная функции: {derivative_f3}")
+df3 = sp.diff(f3, x)
+crit_pts = sp.solve(df3, x)
+valid_pts = [c for c in crit_pts if -2 <= c <= 4]
+values = [f3.subs(x, c) for c in valid_pts] + [f3.subs(x, -2), f3.subs(x, 4)]
+print(f"\n3) Экстремумы f(x)=x^2-2(x-6) на [-2, 4]")
+print(f"\tНаименьшее значение: {min(values)}, Наибольшее: {max(values)}")
 
-crit_pts = sp.solve(derivative_f3, x)
-print(f"Найденные критические точки: {crit_pts}")
-
-valid_pts = []
-for pt in crit_pts:
-    if pt >= -2 and pt <= 4:
-        valid_pts.append(pt)
-
-print(f"Точки, попавшие в отрезок [-2; 4]: {valid_pts}")
-
-values = []
-
-for pt in valid_pts:
-    val = f3.subs(x, pt)
-    values.append(val)
-
-val_left = f3.subs(x, -2)
-val_right = f3.subs(x, 4)
-
-values.append(val_left)
-values.append(val_right)
-
-print(f"Список всех значений для сравнения: {values}")
-
-min_val = min(values)
-max_val = max(values)
-
-print(f"Наименьшее значение (Мин): {min_val}")
-print(f"Наибольшее значение (Макс): {max_val}")
-
-print("\nЗАДАЧА 4")
+# Частные производные в точке: f(x,y)=ln(x^2+y^2)+2x/y, M0(2,1)
 f4 = sp.ln(x**2 + y**2) + 2*x/y
-df4_dx = sp.diff(f4, x).subs({x:2, y:1})
-df4_dy = sp.diff(f4, y).subs({x:2, y:1})
-print(f"4) df/dx(2,1) = {df4_dx}, df/dy(2,1) = {df4_dy}")
+df4dx = sp.diff(f4, x).subs({x:2, y:1})
+df4dy = sp.diff(f4, y).subs({x:2, y:1})
+print("\n4) Частные производные f(x,y)=ln(x^2+y^2)+2x/y в M0(2,1)")
+print(f"\t∂f/∂x = {df4dx}, f/∂y = {df4dy}")
 
-print("\nЗАДАЧА 5")
+# Интегралы
 int5a = sp.integrate(1/sp.sqrt(16-x**2), (x, 0, 2))
-print(f"5a) Интеграл: {int5a}")
-
+print(f"\n5а) ∫₀² dx/√(16-x²) = {int5a}")
 int5b = sp.integrate(sp.atan(x)/x**2, (x, 1, sp.oo))
-print(f"5b) Интеграл: {int5b}")
-
+print(f"5б) ∫₁^∞ arctan(x)/x² dx = {int5b}")
 int5c = sp.integrate(sp.integrate(sp.cos(2*y)*x*y, (x, 1, 2)), (y, sp.pi/2, sp.pi))
-print(f"5c) Двойной интеграл: {int5c}")
+print(f"5в) Двойной интеграл ∫∫ cos(2y)xy dxdy = {int5c}")
 
-print("\nЗАДАЧА 6")
-n = sp.symbols('n')
-term6 = 36 / (n**2 + 2*n - 3)
-sum6 = sp.summation(term6, (n, 2, sp.oo))
-print(f"6) Сумма ряда: {sum6}")
+# Сумма ряда: Σ_{n=2}^{∞} 36/(n²+2n-3)
+sum6 = sp.summation(36/(n**2 + 2*n - 3), (n, 2, sp.oo))
+print(f"\n6) Сумма ряда Σ 36/(n²+2n-3) = {sum6}")
 
-print("\nЗАДАЧА 7")
-f7 = x / (2+x)
-series7 = f7.series(x, -2, 5)
-print(f"7) Ряд в точке -2: {series7}")
+# Разложение в ряд Тейлора: f(x)=x/(2+x), x₀=-2, n=5
+f7 = x / (2 + x)
+# В точке -2 функция имеет особенность, SymPy автоматически построит ряд Лорана
+series7 = f7.series(x, -2, 5).removeO()
+print(f"\n7) Ряд Тейлора f(x)=x/(2+x) в x₀=-2: {series7}")
+
+
+print("\n3. МАТРИЧНЫЕ ВЫЧИСЛЕНИЯ (Вариант 6)")
+
+# 3.1 сформировать матрицу 7x7: a_ij = i-j при i≤j, иначе j-i (математическая нумерация 1..n)
+n_mat = 7
+A_mat = sp.Matrix(n_mat, n_mat, lambda i, j: abs((i+1) - (j+1)))
+print(f"\n1) Матрица {n_mat}x{n_mat} (a_ij = |i-j|)")
+sp.pprint(A_mat)
+
+# 3.2 матричное выражение: n=4, X = (A^T B - C D) B^T, X = max элемент
+n_expr = 4
+A2 = sp.Matrix([[1, 2, 0, 1], [0, 1, 2, 3], [1, 0, 1, 2], [2, 1, 0, 1]])
+B2 = sp.Matrix([[1, 0, 1, 0], [0, 1, 0, 1], [1, 0, 1, 0], [0, 1, 0, 1]])
+C2 = sp.Matrix([[2, 1, 1, 2], [1, 2, 2, 1], [2, 1, 1, 2], [1, 2, 2, 1]])
+D2 = sp.diag(1, 2, 3, 4)
+X_mat = (A2.T * B2 - C2 * D2) * B2.T
+print("\n2) X = (A^T B - C D) B^T")
+sp.pprint(X_mat)
+print(f"\tМаксимальный элемент: {max(X_mat)}")
+
+# 3.3 векторы: a=(1,-2,3), b=(4,0,-1)
+a_vec = sp.Matrix([1, -2, 3])
+b_vec = sp.Matrix([4, 0, -1])
+c_vec = (a_vec - b_vec).cross(b_vec)
+print("\n3) Векторы a=(1,-2,3), b=(4,0,-1)")
+print(f"\tа) a·b = {a_vec.dot(b_vec)}")
+angle_vec = sp.acos(a_vec.dot(b_vec) / (a_vec.norm() * b_vec.norm()))
+print(f"\tб) Угол = {angle_vec.evalf()} рад")
+print(f"\tв) c = (a-b)×b = {c_vec.T}, длина = {c_vec.norm()}")
+
+# 3.4 собственные значения и векторы
+M_eig = sp.Matrix([[3, 1, 0], [0, 3, 1], [0, 0, 3]])
+print("\n4) Собственные значения и векторы матрицы:")
+sp.pprint(M_eig)
+for val, mult, vecs in M_eig.eigenvects():
+    print(f"   λ={val}, кратность={mult}, векторы={vecs}")
+
+# 3.5 решение СЛАУ тремя способами
+print("\n5) Решение СЛАУ:")
+A_sys = sp.Matrix([[1, 2, -3, 4], [-1, 0, 1, 2], [3, 4, 5, 0], [5, 6, 7, -2]])
+B_sys = sp.Matrix([-13, -1, 11, 19])
+detA = A_sys.det()
+
+if detA != 0:
+    # а) Метод Крамера (замена i-го столбца на B_sys)
+    sol_cr = []
+    for i in range(4):
+        A_mod = A_sys.copy()
+        A_mod[:, i] = B_sys  # Заменяем i-й столбец на вектор свободных членов
+        sol_cr.append(A_mod.det() / detA)
+    print(f"\tа) Метод Крамера: {sol_cr}")
+
+    # б) Обратная матрица
+    X_inv = A_sys.inv() * B_sys
+    print(f"\tб) Обратная матрица: {X_inv.T}")
+else:
+    print("\tа) и б) Определитель = 0, методы не применимы.")
+
+# в) Функция linsolve()
+vars_sys = sp.symbols('x1 x2 x3 x4')
+eqs_sys = [sp.Eq(A_sys.row(i).dot(sp.Matrix(vars_sys)), B_sys[i]) for i in range(4)]
+print(f"\tв) linsolve: {sp.linsolve(eqs_sys, vars_sys)}")
+
+
+print("\n4. ГРАФИКИ (Вариант 6)")
+
+# 4.1 Кусочная функция
+f_piece = sp.Piecewise((x**2, x < -1), (3-x, (x >= -1) & (x <= 1)), (x**2, x > 1))
+p1 = plot(f_piece, (x, -4, 4), show=False, line_color='red', title='Кусочная f(x)', backend='matplotlib')
+
+# 4.2 Два графика
+f2 = x**3 - 4*x
+g2 = 2*x + 1
+p2 = plot(f2, (x, -3, 3), show=False, line_color='blue', label='x³-4x', backend='matplotlib')
+p2.extend(plot(g2, (x, -3, 3), show=False, line_color='green', label='2x+1', backend='matplotlib'))
+p2.title = 'f(x) и g(x)'
+p2.legend = True
+
+# 4.3 Параметрическая кривая
+x_par = sp.cos(t) + sp.cos(2*t)
+y_par = sp.sin(t) + sp.sin(2*t)
+p3 = plot_parametric((x_par, y_par, (t, 0, 2*sp.pi)), show=False, line_color='magenta',
+                     title='Параметрическая кривая', backend='matplotlib')
+
+# 4.4 Полярная роза
+r_pol = sp.sin(3*phi)
+p4 = plot_parametric((r_pol*sp.cos(phi), r_pol*sp.sin(phi), (phi, 0, 2*sp.pi)), show=False,
+                     line_color='orange', title='Полярная r=sin(3φ)', backend='matplotlib')
+
+# 4.5 Поверхность
+f_surf = x**2 + y**2
+p5 = plot3d(f_surf, (x, -3, 3), (y, -3, 3), show=False, title='Поверхность z=x²+y²', backend='matplotlib')
+
+# Вывод графиков
+print("Показываем кусочную функцию...")
+p1.show(); input("Нажмите Enter...")
+print("Показываем два графика...")
+p2.show(); input("Нажмите Enter...")
+print("Показываем параметрическую...")
+p3.show(); input("Нажмите Enter...")
+print("Показываем полярную...")
+p4.show(); input("Нажмите Enter...")
+print("Показываем 3D поверхность...")
+p5.show(); input("Нажмите Enter...")
+
+
+print("\n5. ДИФФЕРЕНЦИАЛЬНЫЕ УРАВНЕНИЯ (Вариант 6)")
+
+x = sp.Symbol('x')
+y = sp.Function('y')(x)
+
+# 5.1 Общее решение ОДУ: y''' - 6y'' + 11y' - 6y = 0
+ode1 = sp.Eq(y.diff(x, 3) - 6*y.diff(x, 2) + 11*y.diff(x) - 6*y, 0)
+sol1 = sp.dsolve(ode1, y)
+print("\n1) y''' - 6y'' + 11y' - 6y = 0")
+print(f"\tОбщее решение: {sol1}")
+
+# 5.2 Частное решение с НУ: y'' + y = sin(x), y(0)=0, y'(0)=1
+ode2 = sp.Eq(y.diff(x, 2) + y, sp.sin(x))
+ics2 = {y.subs(x, 0): 0, y.diff(x).subs(x, 0): 1}
+sol2 = sp.dsolve(ode2, y, ics=ics2)
+print(f"\n2) y'' + y = sin(x), y(0)=0, y'(0)=1")
+print(f"\tЧастное решение: {sol2}")
+p_ode = plot(sol2.rhs, (x, -2, 10), show=False, line_color='blue',
+             title='Интегральная кривая', backend='matplotlib')
+p_ode.show(); input("Закройте окно графика и нажмите Enter...")
+
+# 5.3 Система ДУ: x'=x+y, y'=x-y
+t_sys = sp.Symbol('t')
+x_t = sp.Function('x')(t_sys)
+y_t = sp.Function('y')(t_sys)
+sys_eq = [sp.Eq(x_t.diff(t_sys), x_t + y_t), sp.Eq(y_t.diff(t_sys), x_t - y_t)]
+sol_sys = sp.dsolve(sys_eq, [x_t, y_t])
+print("\n3) Система: x'=x+y, y'=x-y")
+print("\tОбщее решение:")
+for s in sol_sys:
+    print(f"     {s}")
+# Проверка первого уравнения
+if sol_sys:
+    xs = sol_sys[0].rhs
+    ys = sol_sys[1].rhs
+    chk = sp.simplify(xs.diff(t_sys) - (ys + xs)) # Note: x_t is xs, y_t is ys
+    print(f"\tПроверка x'-(x+y) = {chk} (должно быть 0)")
