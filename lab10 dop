@@ -1,0 +1,23 @@
+#Задание:Сформировать матрицу 3 на 4 и посчитать 
+#кол-во четных элементов в каждой строке 
+
+print("Введите матрицу B 3×4:")
+B = []
+for i in range(3):
+    strok = []
+    for j in range(4):
+        ch = int(input(f"B[{i+1}][{j+1}] = "))
+        strok.append(ch)
+    B.append(strok)
+
+print("\nМатрица B:")
+for strok in B:
+    print(strok)
+print("количество четных элементов в каждой строке")
+for i in range(3):
+    count_even = 0
+    for j in range(4):
+        if B[i][j] % 2 == 0:
+            count_even += 1
+    print(f"Строка{i+1}: {count_even}")
+
