@@ -1,0 +1,41 @@
+#Вариант 26 - матрицы
+#Задание: Сформировать матрицу А по правилу: A[i][j] = (2 * B[i][j] + Bmin) / (Bmax) , 
+#где Bmin, Bmax – минимальный и максимальный элементы произвольно заданной матрицы В
+
+print("Введите матрицу B 3×3:")
+B = []
+# заполнение матрицы
+for i in range(3):
+    strok = []
+    for j in range(3):
+        ch = int(input(f"B[{i+1}][{j+1}] = "))
+        strok.append(ch)
+    B.append(strok)
+
+print("\nМатрица B:")
+for strok in B:
+    print(strok)
+
+Bmin = B[0][0]
+Bmax = B[0][0]
+
+for i in range(3):
+    for j in range(3):
+        if B[i][j] < Bmin:
+            Bmin = B[i][j]
+        if B[i][j] > Bmax:
+            Bmax = B[i][j]
+
+print(f"\nBmin = {Bmin}, Bmax = {Bmax}")
+
+#  матрицa A
+A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+for i in range(3):
+    for j in range(3):
+        A[i][j] = (2 * B[i][j] + Bmin) / (Bmax)
+
+print("\nМатрица A:")
+for strok in A:
+    print(strok)
+
