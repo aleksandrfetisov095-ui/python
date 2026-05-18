@@ -1,0 +1,45 @@
+import random
+
+def InArr(n,m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-100,100)
+    return a
+def OutArr(n,m,a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end= '\t')
+        print()
+def sum_1d(arr):
+    total = 0
+    for var in arr:
+        total += var
+    return total
+def diagonal(matrix):
+    n = len(matrix)
+    main_diag = []
+    sec_diag = []
+    for i in range(n):
+        main_diag.append(matrix[i][i])
+        sec_diag.append(matrix[i][n-1-i])
+    sum_main = sum_1d(main_diag)
+    sum_sec = sum_1d(sec_diag)
+    return sum_main, sum_sec
+
+n = int(input("cтроки"))
+m = int(input("Столбцы"))
+a = InArr(n,m)
+print("Матрица:")
+OutArr(n,m,a)
+print("\n")
+sum_main, sum_sec = diagonal(a)
+print(sum_main)
+print(sum_sec)
+
+if sum_main > sum_sec:
+    print("У главной")
+elif sum_sec > sum_main:
+    print("У побочной")
+else:
+    print("Равны")
