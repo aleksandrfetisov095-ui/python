@@ -1,0 +1,38 @@
+import random
+
+def InArr(n,m):
+    a = [[0]*m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-100,100)
+    return a
+def OutArr(n,m,a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j],end= '\t')
+        print()
+def sum_1d(arr):
+    total = 0
+    for var in arr:
+        total += var
+    return total
+def max_row(matrix):
+    row = len(matrix)
+    col = len(matrix[0])
+    sum_row = []
+    for i in range(row):
+        row = matrix[i]
+        sum_row.append(sum_1d(row))
+    max_s = max(sum_row)
+    max_s_idx = sum_row.index(max_s)
+    return max_s_idx, max_s, sum_row
+n = int(input("cтроки"))
+m = int(input("Столбцы"))
+a = InArr(n,m)
+print("Матрица:")
+OutArr(n,m,a)
+print("\n")
+max_s_idx, max_s, sum_row = max_row(a)
+print(sum_row)
+print(max_s)
+print(max_s_idx)
