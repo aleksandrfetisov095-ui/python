@@ -1,0 +1,43 @@
+import random
+
+def InArr(n, m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-20, 20)
+    return a
+
+def OutArr(n, m, a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end='\t')
+        print()
+
+def calc_trace(matrix, size):
+    trace_sum = 0
+    for i in range(size):
+        trace_sum += matrix[i][i]
+    return trace_sum
+
+n = int(input("Размер квадратных матриц N: "))
+
+print("Матрица A:")
+A = InArr(n, n)
+OutArr(n, n, A)
+
+print("\nМатрица B:")
+B = InArr(n, n)
+OutArr(n, n, B)
+
+trace_A = calc_trace(A, n)
+trace_B = calc_trace(B, n)
+
+print(f"\nСлед матрицы A: {trace_A}")
+print(f"След матрицы B: {trace_B}")
+
+if trace_A > trace_B:
+    print("Максимальный след имеет матрица A.")
+elif trace_B > trace_A:
+    print("Максимальный след имеет матрица B.")
+else:
+    print("Следы матриц A и B равны.")
