@@ -1,0 +1,41 @@
+import random
+
+
+def InArr(n, m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-10, 10)
+    return a
+
+
+def OutArr(n, m, a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end='\t')
+        print()
+
+
+def multiply_arr(arr, q):
+    for i in range(len(arr)):
+        arr[i] = arr[i] * q
+    return arr
+
+n = int(input("Строки: "))
+m = int(input("Столбцы: "))
+
+matrix = InArr(n, m)
+print("Исходная матрица:")
+OutArr(n, m, matrix)
+
+for j in range(m):
+    multiplier = j + 1  # Номер столбца (1, 2, 3...)
+    column = [matrix[i][j] for i in range(n)]
+    multiplied_col = multiply_arr(column, multiplier)
+
+    # Записываем обратно
+    for i in range(n):
+        matrix[i][j] = multiplied_col[i]
+
+print("\nМатрица после умножения столбцов на их номер:")
+OutArr(n, m, matrix)
