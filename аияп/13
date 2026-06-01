@@ -1,0 +1,40 @@
+import random
+
+def InArr(rows, cols):
+    a = [[0] * cols for _ in range(rows)]
+    for i in range(rows):
+        for j in range(cols):
+            a[i][j] = random.randint(-50, 50)
+    return a
+
+def OutArr(rows, cols, a):
+    for i in range(rows):
+        for j in range(cols):
+            print(a[i][j], end='\t')
+        print()
+
+def zero_negatives(arr):
+    """Заменяет все отрицательные элементы в массиве на 0"""
+    for i in range(len(arr)):
+        if arr[i] < 0:
+            arr[i] = 0
+
+# --- Основная программа ---
+rows = int(input("Количество строк: "))
+cols = int(input("Количество столбцов: "))
+n_idx = int(input("Индекс первой строки для обработки (n): "))
+k_idx = int(input("Индекс второй строки для обработки (k): "))
+
+matrix = InArr(rows, cols)
+print("Исходная матрица:")
+OutArr(rows, cols, matrix)
+
+
+if 0 <= n_idx < rows:
+    zero_negatives(matrix[n_idx])
+
+if 0 <= k_idx < rows:
+    zero_negatives(matrix[k_idx])
+
+print(f"\nМатрица после обнуления отрицательных в строках {n_idx} и {k_idx}:")
+OutArr(rows, cols, matrix)
