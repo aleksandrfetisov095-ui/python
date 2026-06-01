@@ -1,0 +1,44 @@
+import random
+
+def InArr(n, m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-100, 100)
+    return a
+
+def OutArr(n, m, a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end='\t')
+        print()
+
+def sort_asc(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+
+n = int(input("Введите количество строк: "))
+m = int(input("Введите количество столбцов: "))
+
+matrix = InArr(n, m)
+print("Исходная матрица:")
+OutArr(n, m, matrix)
+
+for j in range(m):
+    column = [matrix[i][j] for i in range(n)]
+    sorted_col = sort_asc(column)
+    for i in range(n):
+        matrix[i][j] = sorted_col[i]
+
+print("\nМатрица после сортировки столбцов:")
+OutArr(n, m, matrix)
+
+for i in range(n):
+    matrix[i] = sort_asc(matrix[i])
+
+print("\nМатрица после дополнительной сортировки строк:")
+OutArr(n, m, matrix)
