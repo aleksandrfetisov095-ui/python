@@ -1,0 +1,37 @@
+import random
+def InArr(n, m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-50, 50)
+    return a
+def OutArr(n, m, a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end='\t')
+        print()
+def find_indices_range(arr, p, q):
+    indices = []
+    for i in range(len(arr)):
+        if p <= arr[i] <= q:
+            indices.append(i)
+    return indices
+
+
+n = int(input("Строки: "))
+m = int(input("Столбцы: "))
+p = float(input("Нижняя граница p: "))
+q = float(input("Верхняя граница q: "))
+
+matrix = InArr(n, m)
+print("Матрица:")
+OutArr(n, m, matrix)
+
+print(f"\nАдреса (строка, столбец) элементов в диапазоне [{p}, {q}] по столбцам:")
+for j in range(m):
+    column = [matrix[i][j] for i in range(n)]
+    row_indices = find_indices_range(column, p, q)
+
+    if row_indices:
+        for i in row_indices:
+            print(f"Столбец {j}, Строка {i}: a[{i}][{j}] = {matrix[i][j]}")
