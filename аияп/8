@@ -1,0 +1,41 @@
+import random
+def InArr(n,m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-100,100)
+    return a
+def OutArr(n,m,a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end = "\t")
+        print()
+def find_min(arr):
+    min_val = arr[0]
+    min_idx = 0
+    for i in range(1, len(arr)):
+        if min_val > arr[i]:
+            min_val = arr[i]
+            min_idx = i
+    return min_val,min_idx
+
+n = int(input("Ввод кол-во строк"))
+m = int(input("Ввод кол-во столбцов"))
+matrix = InArr(n,m)
+print("Сгенерированная матрица:")
+OutArr(n, m, matrix)
+
+global_min = matrix[0][0]
+col_idx = 0
+
+for j in range(m):
+    column = [matrix[i][j] for i in range(n)]
+
+    col_min_val, col_min_local_idx = find_min(column)
+
+    if col_min_val < global_min:
+        global_min = col_min_val
+        col_idx = j
+
+print(f"\nГлобальный минимум: {global_min}")
+print(f"Находится в столбце номер: {col_idx + 1}")
