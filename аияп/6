@@ -1,0 +1,30 @@
+import random
+def InArr(n,m):
+    a = [[0] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            a[i][j] = random.randint(-100,100)
+    return a
+def OutArr(n,m,a):
+    for i in range(n):
+        for j in range(m):
+            print(a[i][j], end = "\t")
+        print()
+def cnt_less(arr, p):
+    count = 0
+    for val in arr:
+        if val < p:
+            count += 1
+    return count
+n = int(input("Ввод кол-во строк"))
+m = int(input("Ввод кол-во столбцов"))
+p = float(input("Ввод p:"))
+
+matrix = InArr(n,m)
+print("Сгенерированная матрица:")
+OutArr(n,m,matrix)
+
+print(f"Кол-во эл меньше {p} в каждом строке")
+for i in range(n):
+    k = cnt_less(matrix[i], p)
+    print(f"Строка {i}: {k}")
