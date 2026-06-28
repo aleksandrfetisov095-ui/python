@@ -1,44 +1,40 @@
 import random
 
-
-def InArr(n, m):
+def InArr(n,m):
     a = [[0] * m for _ in range(n)]
     for i in range(n):
         for j in range(m):
-            a[i][j] = random.randint(-50, 50)
+            a[i][j] = random.randint(-100,100)
     return a
 
-def OutArr(n, m, a):
+def OutArr(n,m,a):
     for i in range(n):
         for j in range(m):
-            print(a[i][j], end='\t')
+            print(a[i][j], end = "\t")
         print()
-
-def find_indices_in_range(arr, p, q):
-    indices = []
+def find_idx(arr,p,q):
+    indxis = []
     for i in range(len(arr)):
         if p <= arr[i] <= q:
-            indices.append(i)
-    return indices
+            indxis.append(i)
+    return indxis
 
-n = int(input("Строки: "))
-m = int(input("Столбцы: "))
+n = int(input("n"))
+m = int(input("m"))
 p = float(input("Нижняя граница p: "))
 q = float(input("Верхняя граница q: "))
+a = InArr(n,m)
+print("Matrix")
+OutArr(n,m,a)
 
-matrix = InArr(n, m)
-print("Матрица:")
-OutArr(n, m, matrix)
+print(f"Диапазон {p},{q}")
 
-print(f"\nАдреса (строка, столбец) элементов в диапазоне [{p}, {q}]:")
 flag = False
 for i in range(n):
-    local_indices = find_indices_in_range(matrix[i], p, q)
-
-    if local_indices:
+    k = find_idx(a[i], p,q)
+    if k:
         flag = True
-        for j in local_indices:
-            print(f"Элемент a[{i}][{j}] = {matrix[i][j]}")
-
+        for j in k:
+            print(f"a[{i + 1}][{j + 1}] = {a[i][j]}")
 if not flag:
-    print("Элементов в заданном диапазоне не найдено.")
+    print("Нет элементов")
