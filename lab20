@@ -3,14 +3,12 @@ from tkinter import ttk, messagebox
 import os
 import tempfile
 from PIL import Image, ImageTk
-
 PRICE_PER_MIN = 5.0
 DISCOUNT_WEEKEND = 0.15
 DISCOUNT_LONG = 0.30
 LIMIT_MINUTES = 30
 HISTORY_FILE = os.path.join(tempfile.gettempdir(), 'history.txt')
 AUTHOR_IMAGE_PATH = "author.jpg"
-
 def calculate():
     """
     Выполняет расчёт стоимости междугороднего разговора.
@@ -50,8 +48,6 @@ def calculate():
         messagebox.showerror("Ошибка формата", "Введите корректное числовое значение!", parent=root)
     except Exception as e:
         messagebox.showerror("Непредвиденная ошибка", f"Произошла ошибка: {e}", parent=root)
-
-
 def save_result():
     """
     Сохраняет текущий результат расчёта в файл истории.
