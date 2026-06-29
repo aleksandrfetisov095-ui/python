@@ -1,18 +1,13 @@
 from random import randint, choice
-
 NAME_DATA = "Data.txt"
 NAME_RES = "Result.txt"
-
 SIMVOLS = "ABCDEF0123456789"
-
-
 def create_file():
     """Режим 1: Создание файла Data.txt"""
     print("Введите количество строк N:")
     n_str = input()
     n = int(n_str)
     f = open(NAME_DATA, "w")
-
     i = 0
     while i < n:
         length = randint(10, 100)
